@@ -1,0 +1,91 @@
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+
+const Register = () => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [mes, setMes] = useState('')
+
+
+
+    const Submithandler = async (e) => {
+        e.preventDefault()
+        let response = await fetch('http://localhost:8000/register', {
+            method: 'POST',
+            body: JSON.stringify({ name, email, password }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json()
+        if (response.ok) {
+            toast.success(data.Message)
+        } else {
+            toast.error(data.Message)
+        }
+    }
+    return (
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow-sm">
+                        <div className="card-body">
+                            <h3 className="card-title text-center mb-4">Register</h3>
+                            <form onSubmit={Submithandler}>
+                                <div className="mb-3">
+                                    <label htmlFor="name" className="form-label">
+                                        Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="name"
+                                        placeholder="Enter your name"
+                                        onChange={(e) => setName(e.target.value)}
+                                        value={name}
+                                    />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="email" className="form-label">
+                                        Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        id="email"
+                                        placeholder="Enter your email"
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={email}
+                                    />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label">
+                                        Password
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        id="password"
+                                        placeholder="Enter your password"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={password}
+                                    />
+                                </div>
+
+                                <button type="submit" className="btn btn-primary w-100">
+                                    Register
+                                </button>
+                                {mes}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Register;
